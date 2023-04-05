@@ -54,25 +54,37 @@ string genocut (string arq, unsigned tam, unsigned quant)
     unsigned seed = chrono::system_clock::now().time_since_epoch().count();
     mt19937 g1 (seed);
 
-    unsigned i, n;
+    unsigned i, n, j = 0;
     string s;
     map<string,string> mpsq;
     set<unsigned> snn;
+    const unsigned NUM_INTER = 10;
 
     for (auto a: mpseq){
-            uniform_int_distribution<int> unif (0,a.second.size());
-            for (i = 0; i < quant; ++i){
-                n=unif(g1);
+        int par = a.second.size() - tam;
 
+        if (par < 0){
+            mpsq [a.first+"_"+to_string(i)] = a.second;
+        }
+        else{
+            uniform_int_distribution<int> unif (0,par);
+
+            for (i = 0; i < quant; ++i){
+                n=unif(g1);                    
                 while (n > (a.second.size()-tam-1))
                     n = unif(g1);
-                while (chkseq(snn, n, tam))
+                while (chkseq(snn, n, tam) && (j < NUM_INTER)){
                     n = unif(g1);
+                    ++j;
+                }
 
-                mpsq [a.first+"_"+to_string(i)] = a.second.substr (n,tam);
+                if (j != NUM_INTER)
+                    mpsq [a.first+"_"+to_string(i)] = a.second.substr (n,tam);
                 
                 snn.insert (n);
+                j = 0;
             }
+        }
     }
 
     string stab = "";
