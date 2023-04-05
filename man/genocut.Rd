@@ -7,7 +7,7 @@
 genocut(file, len = 0, num = 0)
 }
 \arguments{
-\item{file}{FASTA file}
+\item{file}{FASTA file with multiple sequences}
 
 \item{len}{length of the sequence to be cut}
 

@@ -55,16 +55,17 @@ string genocut (string arq, unsigned tam, unsigned quant)
     mt19937 g1 (seed);
 
     unsigned i, n, j = 0;
-    string s;
+    string s, id;
     map<string,string> mpsq;
     set<unsigned> snn;
     const unsigned NUM_INTER = 10;
 
     for (auto a: mpseq){
         int par = a.second.size() - tam;
+        id = a.first; id.erase(0,1);
 
         if (par < 0){
-            mpsq [a.first+"_"+to_string(i)] = a.second;
+            mpsq [id+"_"+to_string(i+1)] = a.second;
         }
         else{
             uniform_int_distribution<int> unif (0,par);
@@ -79,7 +80,7 @@ string genocut (string arq, unsigned tam, unsigned quant)
                 }
 
                 if (j != NUM_INTER)
-                    mpsq [a.first+"_"+to_string(i)] = a.second.substr (n,tam);
+                    mpsq [id+"_"+to_string(i+1)] = a.second.substr (n,tam);
                 
                 snn.insert (n);
                 j = 0;
@@ -91,6 +92,7 @@ string genocut (string arq, unsigned tam, unsigned quant)
 
     for (auto p: mpsq)
         stab += '>' + p.first + '\n' + p.second + '\n';
+    stab.pop_back();
 
     return stab; 
 }
