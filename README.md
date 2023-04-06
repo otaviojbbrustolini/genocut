@@ -1,5 +1,5 @@
 # genocut
 
-## Required library: gzstream
+### Required library: gzstream
 * In Debian/Ubuntu: 
 ` apt install libgzstream-dev `
