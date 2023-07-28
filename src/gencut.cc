@@ -36,17 +36,8 @@ inline map<string,string> get_seqs (string file)
     return mps;
 }
 
-inline bool chkseq (set<unsigned> &sn, unsigned &n, unsigned &tam)
-{
-    for (auto t: sn){
-        if (n == t)
-            return true;
-        if ( ((n+tam > t) && (n < t)) || ((n < t+tam) && (n > t)) )
-            return true;
-    }
-    return false;
-}
-
+//quant => quantidade por sequencia
+//tam => tamanho do fragmento por sequencia
 string genocut (string arq, unsigned tam, unsigned quant)
 {
     map<string,string> mpseq = get_seqs (arq);
@@ -54,37 +45,29 @@ string genocut (string arq, unsigned tam, unsigned quant)
     unsigned seed = chrono::system_clock::now().time_since_epoch().count();
     mt19937 g1 (seed);
 
-    unsigned i, n, j = 0;
+    unsigned i, n;
     string s, id;
     map<string,string> mpsq;
     set<unsigned> snn;
-    const unsigned NUM_INTER = 10;
+
+    cout <<mpseq.size() <<endl;
 
     for (auto a: mpseq){
-        int par = a.second.size() - tam;
+        int par = a.second.size() - tam -1;
         id = a.first; id.erase(0,1);
 
-        if (par < 0){
-            mpsq [id+"_"+to_string(i+1)] = a.second;
+        if ( (par < tam) && (quant < par - quant - 1) ){
+            mpsq [id+"_"+to_string(i+1)] = a.second.substr (0,tam);
         }
         else{
             uniform_int_distribution<int> unif (0,par);
 
-            for (i = 0; i < quant; ++i){
-                n=unif(g1);                    
-                while (n > (a.second.size()-tam-1))
-                    n = unif(g1);
-                while (chkseq(snn, n, tam) && (j < NUM_INTER)){
-                    n = unif(g1);
-                    ++j;
-                }
-
-                if (j != NUM_INTER)
-                    mpsq [id+"_"+to_string(i+1)] = a.second.substr (n,tam);
-                
+            for (i = 0; snn.size() < quant; ++i){
+                n=unif(g1);
+                mpsq [id+"_"+to_string(i+1)] = a.second.substr (n,tam);
                 snn.insert (n);
-                j = 0;
             }
+            snn.clear();
         }
     }
 
@@ -96,6 +79,7 @@ string genocut (string arq, unsigned tam, unsigned quant)
 
     return stab; 
 }
+
 
 extern "C" 
 {
