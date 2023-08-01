@@ -1,1 +1,2 @@
+PKG_CPPFLAGS = -I./gzstream
 PKG_LIBS = -lgzstream -lz

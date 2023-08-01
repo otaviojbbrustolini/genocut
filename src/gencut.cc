@@ -56,7 +56,8 @@ string genocut (string arq, unsigned tam, unsigned quant)
         int par = a.second.size() - tam -1;
         id = a.first; id.erase(0,1);
 
-        if ( (par < tam) && (quant < par - quant - 1) ){
+        if ( par < tam - 2 * quant ){
+            cout <<"Warning: sequence do not have the minimum size for random sampling: " <<id <<endl;
             mpsq [id+"_"+to_string(i+1)] = a.second.substr (0,tam);
         }
         else{

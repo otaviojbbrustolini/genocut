@@ -12,7 +12,7 @@
 #' @useDynLib genocut
 #' @exportPattern "^[[:alpha:]]+"
 #' @export
-genocut <- function (file, len=0, num=0, overlap=T)
+genocut <- function (file, len=0, num=0)
 {
     if (len==0) stop ("Parameter length (len) must be set.")
     if (num==0) stop ("Paramter number of sequence (num) must be set.")
