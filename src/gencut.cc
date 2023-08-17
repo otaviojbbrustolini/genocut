@@ -50,14 +50,16 @@ string genocut (string arq, unsigned tam, unsigned quant)
     map<string,string> mpsq;
     set<unsigned> snn;
 
-    cout <<mpseq.size() <<endl;
+    cout <<"Raw number of sequences in the file: " <<mpseq.size() <<endl;
 
     for (auto a: mpseq){
-        int par = a.second.size() - tam -1;
+        int par = a.second.size();
         id = a.first; id.erase(0,1);
 
-        if ( par < tam - 2 * quant ){
-            cout <<"Warning: sequence do not have the minimum size for random sampling: " <<id <<endl;
+        if (par < tam)
+            cout <<"Warning: the sequence " <<id <<" was IGNORED because its size is less than " <<tam <<endl;
+        else if ( par < tam + 2 * quant ){
+            cout <<"Warning: sequence does not have the minimum size for random sampling: " <<id <<endl;
             mpsq [id+"_"+to_string(i+1)] = a.second.substr (0,tam);
         }
         else{
